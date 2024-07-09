@@ -1,7 +1,8 @@
-.extern current
 .section .text
 .global switch_thread
+
 switch_thread:
+
     pushq %rbp
     movq %rsp, %rbp
 
@@ -23,16 +24,16 @@ switch_thread:
     pushf
 
     /* 切换栈顶指针 */
-    /* 第一个参数current（tcb的地址），存在%rdi中 */
-    /* 第二个参数next（tcb的地址），存在%rsi中 */
-    /* 第二个参数current的地址（current的地址），存在%rdx中 */
-    movq %rsp, 16(%rdi)  /* 把栈顶指针%rsp存到current指向的tcb中的rsp成员（基址偏移16字节） */
-    movq 16(%rsi), %rsp  /* 把next指向的tcb中的rsp成员（基址偏移16字节）存到栈顶指针%rsp中 */
-    movq %rsi, (%rdx)    /* 把next赋值给current */
+    /* 第1个参数next，存在%rdi中 */
+    /* 第2个参数cur_tcb_value，存在%rsi中 */
+    /* 第3个参数cur_tcb_addr，存在%rdx中 */
+    /* 第4个参数interrupt_addr，存在%rcx中 */
+    movq %rsp, (%rsi) /* 把栈顶指针%rsp存到当前tcb中的rsp成员 */
+    movq (%rdi), %rsp /* 把next指向的tcb中的rsp成员存到栈顶指针%rsp中 */
+    movq %rdi, (%rdx) /* 把next赋值给cur_tcb */
 
-    /* 解除alarm信号的屏蔽 */
-    /* 要先解除再恢复现场，因为open_alarm会更改寄存器状态*/
-    call open_alarm
+    /* 开中断 */
+    call open_interrupt
 
     /* 恢复现场 */
     popf
