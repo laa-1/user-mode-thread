@@ -25,7 +25,6 @@ int linkqueue_empty(linkqueue_t *linkqueue);
 int linkqueue_front(linkqueue_t *linkqueue);
 
 // 不会判空，需要队列不为空
-// 不会深拷贝数据
 void linkqueue_push_back(linkqueue_t *linkqueue, int data);
 
 // 不会判空，需要队列不为空
