@@ -131,7 +131,7 @@ void try_clean_thread()
     {
         if (tcbs[i] != NULL)
         {
-            // 当前线程依赖于其对应的栈，不能对当前线程进行清理（第一个线程除外）
+            // 当前线程依赖于其对应的栈，不能对当前线程进行清理
             if (tcbs[i] != cur_tcb && tcbs[i]->status == THREAD_EXIT)
             {
                 free(tcbs[i]);
