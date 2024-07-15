@@ -27,12 +27,12 @@ switch_thread:
     /* 第1个参数next，存在%rdi中 */
     /* 第2个参数cur_tcb_value，存在%rsi中 */
     /* 第3个参数cur_tcb_addr，存在%rdx中 */
-    /* 第4个参数interrupt_addr，存在%rcx中 */
     movq %rsp, (%rsi) /* 把栈顶指针%rsp存到当前tcb中的rsp成员 */
     movq (%rdi), %rsp /* 把next指向的tcb中的rsp成员存到栈顶指针%rsp中 */
     movq %rdi, (%rdx) /* 把next赋值给cur_tcb */
 
     /* 开中断 */
+    /* 不能先恢复现场，因为调用开中断函数时会破坏现场 */
     call open_interrupt
 
     /* 恢复现场 */
